@@ -1,0 +1,32 @@
+{
+  "name": "xkitchenapi",
+  "version": "1.0.0",
+  "description": "XkitchenAPI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/srireskianita/XAPIs.git"
+  },
+  "author": "Ramadhoni Suryo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/srireskianita/XAPIs/issues"
+  },
+  "homepage": "https://github.com/srireskianita/XAPIs#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "mongodb": "^3.1.1",
+    "mongoose": "^5.2.4",
+    "mongoose-timestamp": "^0.6.0",
+    "restify": "^7.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.2"
+  }
+}
