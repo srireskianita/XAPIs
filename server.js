@@ -5,22 +5,30 @@ const restify = require('restify');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 
-/*
-/ Menentukan Nama Server Dan Versi Server
-*/
+const corsMidWare = require('restify-cors-middleware');
+
 const server = restify.createServer({
-    name: 'X Kitchen Project',
+    name: 'X Kitchen web API',
     version: '1.0.0'
 });
 
 server.use(bodyParser.json());
 
-server.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS, PUT");
-    next();
-});
+const cors = corsMidWare({
+    origins : ['*'],
+    allowHeaders : ['X-App-Version'],
+    exposeHeaders : []
+})
+
+server.pre(cors.preflight);
+server.use(cors.actual);
+
+// server.use(function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS, PUT");
+//     next();
+// });
 
 server.get('/', (req, res, next) => {
     var html = '<html><head><title>Some Title</title></head><body><h1>LiveCode</h1></body></html>';
@@ -33,6 +41,9 @@ server.get('/', (req, res, next) => {
     res.write(html);
     res.end;
 });
+
+
+
 
 /*
 / Route
@@ -129,6 +140,7 @@ global.config = require('./components/configurations/config');
 //        });
 //    }
 // }
+
 
 server.listen(config.port, function () {
     console.log('%s listen at %s', server.name, server.url);
