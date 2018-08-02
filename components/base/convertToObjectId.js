@@ -27,5 +27,8 @@ module.exports= function(entity){
     if(entity.orderId){
         entity.orderId = ObjectId(entity.orderId);
     }
+    if(entity.waiterId){
+        entity.waiterId = ObjectId(entity.waiterId);
+    }
     
 }
