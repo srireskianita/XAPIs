@@ -21,7 +21,8 @@ module.exports=exports= function(server){
             { $lookup: { from: 'products', localField: 'orders.productId', foreignField: '_id', as: 'products' }}, 
             { $project: {
                   '_id': 1,
-                  'initial': 1,
+                  'code': 1,
+                  'seat': 1,
                   'description': 1,
                   'reservation._id': 1,
                   'reservation.guest': 1,
