@@ -41,6 +41,8 @@ module.exports=exports= function(server){
             }},
             { "$group": {
               "_id": "$_id",
+              "code":{ "$first" : "$code"},
+              "seat":{ "$first" :"$seat"},
               "description": { "$first": "$description" },
               "reservation": { "$first": "$reservation" },
               "orders": { "$push": "$orders" }
