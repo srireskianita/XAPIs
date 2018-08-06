@@ -15,21 +15,37 @@ module.exports=exports= function(server){
            dbo = db.db(config.dbname);
            dbo.collection(name)
            .aggregate([
-            { $lookup: { from: 'reservations', localField: '_id', foreignField: 'tableId', as: 'reservation' }},
-            { $unwind: {path: '$reservation',"preserveNullAndEmptyArrays": true} },
-            { $lookup: { from: 'orders', localField: 'reservation._id', foreignField: 'reservationId', as: 'orders' }},
-            { $lookup: { from: 'products', localField: 'orders.productId', foreignField: '_id', as: 'products' }}, 
-            { $project: {
-                  '_id': 1,
-                  'code': 1,
-                  'seat': 1,
-                  'description': 1,
-                  'reservation._id': 1,
-                  'reservation.guest': 1,
-                  'orders' : 1,
-                  'products.name':1,
-                  
-            }}
+            { "$lookup": {
+              "from": "reservations",
+              "localField": "_id",
+              "foreignField": "tableId",
+              "as": "reservation"
+            }},
+            { "$unwind": { "path": '$reservation', 'preserveNullAndEmptyArrays': true }},
+            { "$lookup": {
+              "from": "orders",
+              "localField": "reservation._id",
+              "foreignField": "reservationId",
+              "as": "orders",
+            }},
+            { "$unwind": { "path": '$orders', 'preserveNullAndEmptyArrays': true }},
+            { "$lookup": {
+              "from": "products",
+              "localField": "orders.productId",
+              "foreignField": "_id",
+              "as": "orders.products"
+            }},
+            { "$unwind": { "path": '$orders.products', 'preserveNullAndEmptyArrays': true }},
+            { "$addFields": {
+              "orders.name": "$orders.products.name"
+            }},
+            { "$group": {
+              "_id": "$_id",
+              "description": { "$first": "$description" },
+              "reservation": { "$first": "$reservation" },
+              "orders": { "$push": "$orders" }
+            }},
+            { "$project": { "orders.products": 0 }}
           ])
            .toArray(function (err, response) {
                if (err) throw err;
